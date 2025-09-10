@@ -16,7 +16,7 @@ version = {attr = "hooked.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["hooked*"]
+include = ["lib"]
 exclude = ["**/*.__pycache__"]
 
 [tool.setuptools.package-data]
