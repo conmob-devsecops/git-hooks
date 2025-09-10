@@ -18,7 +18,7 @@ from hooked.lib import (
     git_unset_template_dir,
     remove_base_dir,
     update_config_git_repo,
-    get_hooked_location
+    self_upgrade,
 )
 
 from hooked import __version__
@@ -77,10 +77,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
 
     if args.cmd == 'upgrade':
-        logger.debug('Upgrading hooked...')
-        hooked_location = get_hooked_location()
-        logger.debug(f"Current hooked location: {hooked_location}")
-        return 0
+        return self_upgrade(force=args.force, reset=args.reset, switch=args.switch)
 
     if args.cmd == 'uninstall':
         logger.debug('Uninstalling hooked...')
