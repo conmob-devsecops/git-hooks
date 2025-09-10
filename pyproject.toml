@@ -16,8 +16,8 @@ version = {attr = "hooked.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-namespaces = true
-exclude = ["**/**/*.__pycache__"]
+include = ["hooked*"]
+exclude = ["**/*.__pycache__"]
 
 [tool.setuptools.package-data]
 hooked = ["data/**"]
