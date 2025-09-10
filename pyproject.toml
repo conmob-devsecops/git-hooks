@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hooked"
+dynamic = ["version"]
+description = "Inserts a global hook into Git."
+requires-python = ">=3.12"
+dependencies = [
+    "pre-commit == 4.3.0"
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "hooked.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
+exclude = ["**/**/*.__pycache__"]
+
+[tool.setuptools.package-data]
+hooked = ["data/**"]
+
+[project.scripts]
+hooked = "hooked.__main__:main"

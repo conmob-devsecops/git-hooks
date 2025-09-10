@@ -1,0 +1,104 @@
+from __future__ import annotations
+
+import logging
+from collections.abc import Sequence
+
+from hooked.lib import (
+    cmd_parser,
+    copy_git_hook_templates,
+    copy_git_hooks,
+    create_base_dir,
+    create_git_template_dir,
+    create_hooks_dir,
+    get_base_dir,
+    get_config_git_repo,
+    git_set_global_hook_path,
+    git_set_template_dir,
+    git_unset_global_hook_path,
+    git_unset_template_dir,
+    remove_base_dir,
+    update_config_git_repo,
+    get_hooked_location
+)
+
+from hooked import __version__
+
+logger = logging.getLogger(__name__)
+
+__log_level__ = logging.DEBUG
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    logging.basicConfig(level=__log_level__)
+
+    parser = cmd_parser()
+
+    args = parser.parse_args(argv)
+
+    if args.cmd == 'version':
+        logger.info(f"hooked version {__version__}")
+        return 0
+
+    if args.cmd == 'init':
+        logger.debug('Initializing hooked...')
+
+        base_dir = get_base_dir()
+        create_base_dir(base_dir)
+        logger.debug(f"Base directory created at {base_dir}")
+        hooks_dir = create_hooks_dir(base_dir)
+        logger.debug(f"Hooks directory created at {hooks_dir}")
+        templates_dir = create_git_template_dir(base_dir)
+        logger.debug(f"Git templates directory created at {templates_dir}")
+
+        copy_git_hooks(hooks_dir)
+        logger.debug('Git hooks copied.')
+
+        get_config_git_repo(base_dir, args.rules, args.branch)
+        logger.debug('Pre-commit config installed.')
+
+        copy_git_hook_templates(templates_dir)
+        logger.debug('Git templates copied.')
+
+        git_set_global_hook_path(hooks_dir)
+        logger.debug('Set Git global hooks path.')
+
+        git_set_template_dir(templates_dir)
+        logger.debug('Set Git global template directory.')
+
+        return 0
+
+    if args.cmd == 'update':
+        logger.debug('Updating hooked...')
+
+        base_dir = get_base_dir()
+        update_config_git_repo(base_dir)
+        logger.debug('Pre-commit config updated.')
+
+        return 0
+
+    if args.cmd == 'upgrade':
+        logger.debug('Upgrading hooked...')
+        hooked_location = get_hooked_location()
+        logger.debug(f"Current hooked location: {hooked_location}")
+        return 0
+
+    if args.cmd == 'uninstall':
+        logger.debug('Uninstalling hooked...')
+
+        base_dir = get_base_dir()
+        remove_base_dir(base_dir)
+        logger.debug('Config directory removed.')
+        git_unset_global_hook_path()
+        logger.debug('Reset Git global hooks path.')
+        git_unset_template_dir()
+        logger.debug('Reset Git global template directory.')
+
+        logger.debug('hooked uninstalled.')
+        return 0
+
+    parser.print_help()
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
