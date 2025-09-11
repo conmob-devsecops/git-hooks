@@ -76,7 +76,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
 
     if args.cmd == 'upgrade':
-        return self_upgrade(force=args.force, reset=args.reset, switch=args.switch)
+        return self_upgrade(reset=args.reset, switch=args.switch)
 
     if args.cmd == 'uninstall':
         logger.debug('Uninstalling hooked...')
