@@ -4,7 +4,7 @@ import logging
 from collections.abc import Sequence
 
 from hooked import __version__
-from hooked.lib import (
+from hooked.library import (
     cmd_parser,
     copy_git_hook_templates,
     copy_git_hooks,
