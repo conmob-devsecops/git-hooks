@@ -1,4 +1,4 @@
-import yaml
+from yaml import safe_load
 import os
 from .files import get_base_dir
 
@@ -13,10 +13,12 @@ def pre_commit_diff(file_path: str) -> str:
 
     hooked_base_dir = get_base_dir()
     hooked_pre_commit_config = os.path.join(hooked_base_dir, 'config', '.pre-commit-config.yaml')
-    hooked_pre_commit = yaml.safe_load(hooked_pre_commit_config)
+    with open(hooked_pre_commit_config) as f:
+        hooked_pre_commit = safe_load(f)
 
-    repo_pre_commit_config = os.path.join(file_path, '.pre-commit-config.yaml')
-    repo_pre_commit = yaml.safe_load(repo_pre_commit_config)
+    repo_pre_commit_config = os.path.join(file_path)
+    with open(repo_pre_commit_config) as f:
+        repo_pre_commit = safe_load(f)
 
     hooked_ids = set()
     repo_ids = set()
@@ -28,5 +30,4 @@ def pre_commit_diff(file_path: str) -> str:
         repo_ids.update({hook.get('id') for hook in repo.get('hooks', [])})
 
     common_ids = hooked_ids.intersection(repo_ids)
-
     return ','.join(common_ids)

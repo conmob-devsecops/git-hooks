@@ -7,7 +7,7 @@ def cmd_parser() -> argparse.ArgumentParser:
         description='Does stuff with Git hooks',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    sub = parser.add_subparsers(dest='cmd', metavar='{init,update,upgrade,version,uninstall}')
+    sub = parser.add_subparsers(dest='cmd')
 
     # init subcommand
     cmd_init = sub.add_parser(

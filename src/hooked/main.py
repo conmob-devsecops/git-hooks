@@ -63,7 +63,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.cmd == 'list-duplicate-hooks':
         path = args.path
-        diff = pre_commit_diff(path)
+        diff = pre_commit_diff(path[0])
         print(diff, end='', flush=True, file=sys.stdout)
         return 0
 
