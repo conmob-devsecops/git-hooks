@@ -2,7 +2,7 @@ import subprocess
 
 def git_set_global_hook_path(hooks_dir: str) -> int:
     """Set the global git hooks path to the specified directory."""
-    cmd = f"git config --global core.hooksPath '{hooks_dir}'"
+    cmd = f"git config --global core.hooksPath {hooks_dir}"
     return subprocess.call(cmd.split())
 
 def git_unset_global_hook_path() -> int:
