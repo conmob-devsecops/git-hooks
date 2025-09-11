@@ -12,7 +12,7 @@ def git_unset_global_hook_path() -> int:
 
 def git_set_template_dir(template_dir: str) -> int:
     """Set the global git template directory to the specified directory."""
-    cmd = f"git config --global init.templateDir '{template_dir}'"
+    cmd = f"git config --global init.templateDir {template_dir}"
     return subprocess.call(cmd.split())
 
 def git_unset_template_dir() -> int:
