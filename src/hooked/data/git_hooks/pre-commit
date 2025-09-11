@@ -3,23 +3,26 @@
 
 set -e
 
+# Repo paths (ignores core.hooksPath)
+GIT_DIR="$(git rev-parse --git-dir)"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+LOCAL_HOOK="$GIT_DIR/hooks/pre-commit"
+
 echo "[hooked] Running global pre-commit checks..."
 # --- Your global checks go here ---
 pre_commit_version=$(pre-commit --version)
 echo "[hooked] pre-commit version: $pre_commit_version"
 pre-commit autoupdate
-# shellcheck disable=SC2046
-duplicated_hooks=hooked
 
+duplicated_hooks=$(hooked list-duplicated-hooks "${REPO_ROOT}/.pre_commit_config.yaml")
+echo "[hooked] Duplicated hooks in repo: $duplicated_hooks"
+
+internal SKIP="${duplicated_hooks}"
+# shellcheck disable=SC2046
 pre-commit run --config ~/.config/hooked/config/.pre-commit-config.yaml --files \
   $(git diff --cached --name-only --diff-filter=ACM)
 
 echo "[hooked] Finished running global hooks..."
-
-# Repo paths (ignores core.hooksPath)
-GIT_DIR="$(git rev-parse --git-dir)"
-REPO_ROOT="$(git rev-parse --show-toplevel)"
-LOCAL_HOOK="$GIT_DIR/hooks/pre-commit"
 
 # Resolve paths to avoid recursion if symlinked to global
 resolve_path() {
