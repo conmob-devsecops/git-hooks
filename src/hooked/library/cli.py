@@ -37,7 +37,7 @@ def cmd_parser() -> argparse.ArgumentParser:
     cmd_skip_duplicates.add_argument(
         'path',
         type=str,
-        required=True,
+        nargs=1,
         help='Path to the .pre-commit-config.yaml file',
     )
 
