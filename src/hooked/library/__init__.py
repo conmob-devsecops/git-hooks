@@ -4,3 +4,4 @@ from .files import get_base_dir, create_base_dir, create_hooks_dir, copy_git_hoo
     remove_base_dir, create_git_template_dir, copy_git_hook_templates
 from .git import git_set_global_hook_path, git_unset_global_hook_path, git_set_template_dir, git_unset_template_dir
 from .upgrade import self_upgrade
+from .logger import logger

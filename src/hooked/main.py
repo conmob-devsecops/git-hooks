@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 from collections.abc import Sequence
 
 from hooked import __version__
@@ -20,16 +19,10 @@ from hooked.library import (
     remove_base_dir,
     update_config_git_repo,
     self_upgrade,
+    logger
 )
 
-logger = logging.getLogger(__name__)
-
-__log_level__ = logging.DEBUG
-
-
 def main(argv: Sequence[str] | None = None) -> int:
-    logging.basicConfig(level=__log_level__)
-
     parser = cmd_parser()
 
     args = parser.parse_args(argv)

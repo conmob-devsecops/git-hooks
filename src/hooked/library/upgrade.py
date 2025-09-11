@@ -10,7 +10,7 @@ from typing import Optional, List, Tuple
 
 from packaging.version import Version, InvalidVersion
 
-from hooked.main import logger
+from .logger import logger
 
 from hooked import __pkg_name__
 from .git import git_get_tags
