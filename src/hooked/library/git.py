@@ -37,3 +37,18 @@ def git_get_tags(url: str) -> list[tuple[str, str]]:
             tag = ref.split('/', 2)[2]
             tags.append((tag, sha))
     return tags
+
+def git_get_last_branch_commit(url: str, branch: str) -> str | None:
+    """
+    Get the latest commit SHA for a given branch from a remote git repository.
+
+    Returns the SHA as a string, or None if not found.
+    """
+    clean = url
+    if clean.startswith('git+'):
+        clean = clean[4:]
+    out = subprocess.check_output(['git', 'ls-remote', '--heads', clean, branch], text=True)
+    for line in out.strip().splitlines():
+        sha, ref = line.split('\t')
+        if ref == f'refs/heads/{branch}':
+            return sha

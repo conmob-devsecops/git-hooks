@@ -55,6 +55,12 @@ def cmd_parser() -> argparse.ArgumentParser:
         metavar='REF',
         help='Switch to given branch/tag/sha and install from there'
     )
+    cmd_upgrade.add_argument(
+        '--pin',
+        action='store_true',
+        default=False,
+        help='Pin current installation to its branch/tag/sha (stop tracking branch)'
+    )
 
     # version subcommand
     sub.add_parser(

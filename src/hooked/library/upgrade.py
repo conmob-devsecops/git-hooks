@@ -6,14 +6,13 @@ import re
 import subprocess
 import sys
 from dataclasses import dataclass
-from typing import Optional, List, Tuple
 
 from packaging.version import Version, InvalidVersion
 
 from .logger import logger
 
 from hooked import __pkg_name__
-from .git import git_get_tags
+from .git import git_get_tags, git_get_last_branch_commit
 
 SEMVER_TAG_RE = re.compile(r'^v?\d+\.\d+\.\d+([.-].+)?$')
 SHA_RE = re.compile(r'^[0-9a-f]{7,40}$', re.IGNORECASE)
@@ -117,11 +116,12 @@ def get_url_ref(url: str, ref: str) -> str:
     return spec_url
 
 
-def self_upgrade(reset=False, switch: str | None = None) -> int:
+def self_upgrade(reset=False, pin=False, switch: str | None = None) -> int:
     """
     upgrade           : branch -> latest; sha -> same; semver tag -> latest semver
     upgrade --reset   : ignore current ref, use latest semver tag
     upgrade --switch X: explicitly switch to branch/tag/sha X
+    upgrade --switch X --pin    : pin to current ref (branch/tag/sha)
     """
 
     # installs are always forced to avoid skipping of moving branches,
@@ -144,12 +144,17 @@ def self_upgrade(reset=False, switch: str | None = None) -> int:
     if not target_ref:
         raise RuntimeError('Could not determine latest semver tag from remote repository.')
 
-    # if switch parameter is given, use it,
-    # since this re-installs hooked anyway in desired version
-    # to prevent upgrades to latest semver tag, sha of the tag is pinned
     if switch:
         logger.debug('Switching to pinned %s', switch)
-        target_ref = get_sha_for_tag(tags, switch)
+        # we can not pin a tag directly, so we pin the sha of the tag
+        # if non-sha is given with --pin, we pin the sha of the current commit
+        # FIXME: breaks, if someone tries to pin a tag
+        if _is_semver_tag(switch):
+            target_ref = get_sha_for_tag(tags, switch)
+        elif pin:
+            target_ref = git_get_last_branch_commit(info.commit, switch)
+        else:
+            target_ref = switch
     # reset we keep the default target_ref of latest semver tag
     elif reset:
         # noop kept for clarity,
