@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from collections.abc import Sequence
 
+from hooked import __version__
 from hooked.lib import (
     cmd_parser,
     copy_git_hook_templates,
@@ -20,8 +21,6 @@ from hooked.lib import (
     update_config_git_repo,
     self_upgrade,
 )
-
-from hooked import __version__
 
 logger = logging.getLogger(__name__)
 
