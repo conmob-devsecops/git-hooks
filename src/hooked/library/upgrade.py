@@ -152,7 +152,7 @@ def self_upgrade(reset=False, pin=False, switch: str | None = None) -> int:
         if _is_semver_tag(switch):
             target_ref = get_sha_for_tag(tags, switch)
         elif pin:
-            target_ref = git_get_last_branch_commit(info.commit, switch)
+            target_ref = git_get_last_branch_commit(info.url, switch)
         else:
             target_ref = switch
     # reset we keep the default target_ref of latest semver tag
