@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # AI NOTE: This file is AI-generated, there may be dragons.
 
-set -e
+set -ex
 
 # Repo paths (ignores core.hooksPath)
 GIT_DIR="$(git rev-parse --git-dir)"
