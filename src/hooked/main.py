@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from collections.abc import Sequence
 
 from hooked import __version__
@@ -19,7 +20,8 @@ from hooked.library import (
     remove_base_dir,
     update_config_git_repo,
     self_upgrade,
-    logger
+    logger,
+    pre_commit_diff
 )
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -57,6 +59,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         git_set_template_dir(templates_dir)
         logger.debug('Set Git global template directory.')
 
+        return 0
+
+    if args.cmd == 'list-duplicate-hooks':
+        path = args.path
+        diff = pre_commit_diff(path)
+        print(diff, end='', flush=True, file=sys.stdout)
         return 0
 
     if args.cmd == 'update':

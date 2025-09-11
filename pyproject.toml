@@ -8,7 +8,8 @@ dynamic = ["version"]
 description = "Inserts a global hook into Git."
 requires-python = ">=3.12"
 dependencies = [
-    "pre-commit == 4.3.0"
+    "pre-commit == 4.3.0",
+    "pyyaml >= 6.0.0",
 ]
 
 [tool.setuptools.dynamic]

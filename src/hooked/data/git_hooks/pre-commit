@@ -9,6 +9,8 @@ pre_commit_version=$(pre-commit --version)
 echo "[hooked] pre-commit version: $pre_commit_version"
 pre-commit autoupdate
 # shellcheck disable=SC2046
+duplicated_hooks=hooked
+
 pre-commit run --config ~/.config/hooked/config/.pre-commit-config.yaml --files \
   $(git diff --cached --name-only --diff-filter=ACM)
 
